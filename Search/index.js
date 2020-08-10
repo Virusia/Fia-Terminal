@@ -1,16 +1,16 @@
 var authConfig = {
-  siteName: 'G-Index', // WebSite Name
+  siteName: 'Fia Terminal', // WebSite Name
   version: '1.0', // VersionControl, do not modify manually
   // Only material!
   theme: 'material', // material  classic
    //add themes color, darkmode
-  main_color: '', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime yellow | amber orange | deep-orange | brown | greyblue-grey
-  accent_color: '', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime | yellow | amber | orange | deep-orange
-  dark_theme: false, // true for dark theme
+  main_color: 'red', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime yellow | amber orange | deep-orange | brown | greyblue-grey
+  accent_color: 'deep-orange', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime | yellow | amber | orange | deep-orange
+  dark_theme: true, // true for dark theme
   // client_id & client_secret - PLEASE USE YOUR OWN!
-  client_id: '202264815644.apps.googleusercontent.com',
-  client_secret: 'X4Z3ca8xfWDb1Voo-F9a7ZxJ',
-  refresh_token: '', // Refresh token
+	client_id: '712021021124-4f9s6pc3o05fl55sp553qpv0a74q8im6.apps.googleusercontent.com',
+	client_secret: 'hYoXmIFUylAH5O9EutrpRW7E',
+	refresh_token: '1//0gkgY_AyXwRnUCgYIARAAGBASNwF-L9IrrGm0hQ3thGZrgLmMx3W8hep9UbhPcAozHJgvwFAW6HAL4_QJoXC7WCF6IqRV11sQH_8',
 
   /**
    * Set up multiple Drives to display; add multiples by format
@@ -26,22 +26,22 @@ var authConfig = {
   roots: [
     {
       id: '',
-      name: 'Sample1',
-      user: 'admin',
-      pass: ''
+      name: 'Current Projects',
+      //user: 'admin',
+      //pass: ''
     },
     {
-      id: 'drive_id',
-      name: 'Sample2',
-      user: 'admin2',
-      pass: 'index'
-    },
-    {
-      id: 'folder_id',
-      name: 'Sample3',
-      user: 'admin3',
-      pass: 'index2'
+      id: '1yS0JLE2LXGwDW2V2zgxyhk5p-Gzbv8BB',
+      name: 'Previous Projects',
+      //user: 'admin2',
+      //pass: 'index'
     }
+    //{
+      //id: '1yS0JLE2LXGwDW2V2zgxyhk5p-Gzbv8BB',
+      //name: 'Previous Projects',
+      //user: 'admin3',
+      //pass: 'index2'
+    //}
   ],
   /**
    * The number displayed on each page of the file list page. [Recommended setting value is between 100 and 1000];
