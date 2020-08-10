@@ -4,7 +4,9 @@ document.write('<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@0.4.3/d
 document.write('<script src="//cdn.jsdelivr.net/npm/markdown-it@10.0.0/dist/markdown-it.min.js"></script>');
 document.write('<style>.mdui-appbar .mdui-toolbar{height:56px;font-size:1pc}.mdui-toolbar>*{padding:0 6px;margin:0 2px}.mdui-toolbar>i{opacity:.5}.mdui-toolbar>.mdui-typo-headline{padding:0 1pc 0 0}.mdui-toolbar>i{padding:0}.mdui-toolbar>a:hover,a.active,a.mdui-typo-headline{opacity:1}.mdui-container{max-width:980px}.mdui-list-item{transition:none}.mdui-list>.th{background-color:initial}.mdui-list-item>a{width:100%;line-height:3pc}.mdui-list-item{margin:2px 0;padding:0}.mdui-toolbar>a:last-child{opacity:1}@media screen and (max-width:980px){.mdui-list-item .mdui-col-sm-3{display:none}.mdui-container{width:100%!important;margin:0}.mdui-toolbar>.mdui-typo-headline,.mdui-toolbar>a:last-child,.mdui-toolbar>i:first-child{display:block}}</style>');
 
+
 if(dark){document.write('<style>* {box-sizing: border-box}body{color:rgba(255,255,255,.87);background-color:#333232}.mdui-theme-primary-'+main_color+' .mdui-color-theme{background-color:#232427!important}</style>');}
+
 
 // Initialize the page and load the necessary resources
 function init(){
@@ -29,6 +31,7 @@ html += `
     $('body').html(html);
 }
 
+
 const Os = {
   isWindows: navigator.platform.toUpperCase().indexOf('WIN') > -1, // .includes
   isMac: navigator.platform.toUpperCase().indexOf('MAC') > -1,
@@ -36,6 +39,7 @@ const Os = {
   isIos: /(iPhone|iPod|iPad)/i.test(navigator.platform),
   isMobile: /Android|webOS|iPhone|iPad|iPod|iOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 };
+
 
 function getDocumentHeight() {
   var D = document;
@@ -45,6 +49,7 @@ function getDocumentHeight() {
     D.body.clientHeight, D.documentElement.clientHeight
   );
 }
+
 
 function render(path) {
   if (path.indexOf("?") > 0) {
@@ -78,6 +83,8 @@ function render(path) {
 }
 
 
+
+
 // Rendering title
 function title(path) {
   path = decodeURI(path);
@@ -91,6 +98,7 @@ function title(path) {
   else
     $('title').html(`${document.siteName} - ${drive_name} - ${path}`);
 }
+
 
 // Render the navigation bar
 function nav(path) {
@@ -106,12 +114,14 @@ function nav(path) {
   });
   html += `</ul>`;*/
 
+
   // change into select
   html += `<select class="mdui-select" onchange="window.location.href=this.value" mdui-select style="overflow:visible;padding-left:8px;padding-right:8px">`;
   names.forEach((name, idx) => {
     html += `<option value="/${idx}:/"  ${idx === cur ? 'selected="selected"' : ''} >${name}</option>`;
   });
   html += `</select>`;
+
 
   if (!model.is_search_page) {
     var arr = path.trim('/').split('/');
@@ -142,16 +152,19 @@ function nav(path) {
             <button class="mdui-textfield-close mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">close</i></button>
         </div>`;
 
+
   // Personal or team
   if (model.root_type < 2) {
     // Show search box
     html += search_bar;
   }
 
+
   $('#nav').html(html);
   mdui.mutation();
   mdui.updateTextFields();
 }
+
 
 /**
  * Initiate POST request for listing
@@ -177,6 +190,7 @@ function requestListPath(path, params, resultCallback, authErrorCallback) {
   })
 }
 
+
 /**
  * Search POST request
  * @param params Form params
@@ -195,6 +209,8 @@ function requestSearch(params, resultCallback) {
     }
   })
 }
+
+
 
 
 // Render file list
@@ -228,10 +244,12 @@ function list(path) {
 	`;
   $('#content').html(content);
 
+
   var password = localStorage.getItem('password' + path);
   $('#list').html(`<div class="mdui-progress"><div class="mdui-progress-indeterminate"></div></div>`);
   $('#readme_md').hide().html('');
   $('#head_md').hide().html('');
+
 
   /**
    * Callback after successful data return from column directory request
@@ -241,13 +259,16 @@ function list(path) {
    */
   function successResultCallback(res, path, prevReqParams) {
 
+
     // Temporarily store nextPageToken and currentPageIndex in the list element
     $('#list')
       .data('nextPageToken', res['nextPageToken'])
       .data('curPageIndex', res['curPageIndex']);
 
+
     // Remove loading spinner
     $('#spinner').remove();
+
 
     if (res['nextPageToken'] === null) {
       // If it is the last page, unbind the scroll event, reset scroll_status, and append data
@@ -275,11 +296,13 @@ function list(path) {
             }
             window.scroll_status.loading_lock = true;
 
+
             // Show one loading spinner
             $(`<div id="spinner" class="mdui-spinner mdui-spinner-colorful mdui-center"></div>`)
               .insertBefore('#readme_md');
             mdui.updateSpinners();
             // mdui.mutation();
+
 
             let $list = $('#list');
             requestListPath(path, {
@@ -298,11 +321,13 @@ function list(path) {
       }
     }
 
+
     // After loading successfully and rendering new data successfully, release the loading lock so that you can continue to process the "scroll to bottom" event
     if (window.scroll_status.loading_lock === true) {
       window.scroll_status.loading_lock = false
     }
   }
+
 
   // Start requesting data from page 1
   requestListPath(path, {password: password},
@@ -319,6 +344,7 @@ function list(path) {
     });
 }
 
+
 /**
  * Append the data of the new page requested to the list
  * @param path path
@@ -330,6 +356,7 @@ function append_files_to_list(path, files) {
   var is_lastpage_loaded = null === $list.data('nextPageToken');
   var is_firstpage = '0' == $list.data('curPageIndex');
 
+
   html = "";
   let targetFiles = [];
   for (i in files) {
@@ -338,6 +365,7 @@ function append_files_to_list(path, files) {
     if (item['size'] == undefined) {
       item['size'] = "";
     }
+
 
     item['modifiedTime'] = utc2beijing(item['modifiedTime']);
     item['size'] = formatFileSize(item['size']);
@@ -384,6 +412,7 @@ function append_files_to_list(path, files) {
     }
   }
 
+
   /*let targetObj = {};
   targetFiles.forEach((myFilepath, myIndex) => {
       if (!targetObj[myFilepath]) {
@@ -399,6 +428,7 @@ function append_files_to_list(path, files) {
       localStorage.setItem(path, JSON.stringify(targetObj));
       // console.log(path)
   }*/
+
 
   if (targetFiles.length > 0) {
     let old = localStorage.getItem(path);
@@ -417,8 +447,10 @@ function append_files_to_list(path, files) {
       new_children = old_children.concat(targetFiles)
     }
 
+
     localStorage.setItem(path, JSON.stringify(new_children))
   }
+
 
   // When it is page 1, remove the horizontal loading bar
   $list.html(($list.data('curPageIndex') == '0' ? '' : $list.html()) + html);
@@ -427,6 +459,7 @@ function append_files_to_list(path, files) {
     $('#count').removeClass('mdui-hidden').find('.number').text($list.find('li.mdui-list-item').length);
   }
 }
+
 
 /**
  * Render the search result list. There is a lot of repetitive code, but there are different logics in it.
@@ -461,9 +494,11 @@ function render_search_result_list() {
 	`;
   $('#content').html(content);
 
+
   $('#list').html(`<div class="mdui-progress"><div class="mdui-progress-indeterminate"></div></div>`);
   $('#readme_md').hide().html('');
   $('#head_md').hide().html('');
+
 
   /**
    * The callback after the search request successfully returns data
@@ -473,13 +508,16 @@ function render_search_result_list() {
    */
   function searchSuccessCallback(res, prevReqParams) {
 
+
     // Temporarily store nextPageToken and currentPageIndex in the list element
     $('#list')
       .data('nextPageToken', res['nextPageToken'])
       .data('curPageIndex', res['curPageIndex']);
 
+
     // Removeloading spinner
     $('#spinner').remove();
+
 
     if (res['nextPageToken'] === null) {
       // If it is the last page, unbind the scroll event, reset scroll_status, and append data
@@ -507,11 +545,13 @@ function render_search_result_list() {
             }
             window.scroll_status.loading_lock = true;
 
+
             // Show one loading spinner
             $(`<div id="spinner" class="mdui-spinner mdui-spinner-colorful mdui-center"></div>`)
               .insertBefore('#readme_md');
             mdui.updateSpinners();
             // mdui.mutation();
+
 
             let $list = $('#list');
             requestSearch({
@@ -528,15 +568,18 @@ function render_search_result_list() {
       }
     }
 
+
     // After loading successfully and rendering new data successfully, release the loading lock so that you can continue to process the "scroll to bottom" event
     if (window.scroll_status.loading_lock === true) {
       window.scroll_status.loading_lock = false
     }
   }
 
+
   // Start requesting data from page 1
   requestSearch({q: window.MODEL.q}, searchSuccessCallback);
 }
+
 
 /**
  * Append a new page of search results
@@ -548,13 +591,16 @@ function append_search_result_to_list(files) {
   var is_lastpage_loaded = null === $list.data('nextPageToken');
   // var is_firstpage = '0' == $list.data('curPageIndex');
 
+
   html = "";
+
 
   for (i in files) {
     var item = files[i];
     if (item['size'] == undefined) {
       item['size'] = "";
     }
+
 
     item['modifiedTime'] = utc2beijing(item['modifiedTime']);
     item['size'] = formatFileSize(item['size']);
@@ -586,6 +632,7 @@ function append_search_result_to_list(files) {
     }
   }
 
+
   // When it is page 1, remove the horizontal loading bar
   $list.html(($list.data('curPageIndex') == '0' ? '' : $list.html()) + html);
   // When it is the last page, count and display the total number of items
@@ -593,6 +640,7 @@ function append_search_result_to_list(files) {
     $('#count').removeClass('mdui-hidden').find('.number').text($list.find('li.mdui-list-item').length);
   }
 }
+
 
 /**
  * Search result item click event
@@ -611,6 +659,7 @@ function onSearchResultItemClick(a_ele) {
     closeOnEsc: true
   });
   mdui.updateSpinners();
+
 
   // Request to get the path
   $.post(`/${cur}:id2path`, {id: a_ele.id}, function (data) {
@@ -652,6 +701,7 @@ function onSearchResultItemClick(a_ele) {
   })
 }
 
+
 function get_file(path, file, callback) {
   var key = "file_path_" + path + file['modifiedTime'];
   var data = localStorage.getItem(key);
@@ -666,6 +716,8 @@ function get_file(path, file, callback) {
 }
 
 
+
+
 // File display? A = view
 function file(path) {
   var name = path.split('/').pop();
@@ -674,24 +726,30 @@ function file(path) {
     return file_code(path);
   }
 
+
   if ("|mp4|webm|avi|".indexOf(`|${ext}|`) >= 0) {
     return file_video(path);
   }
+
 
   if ("|mpg|mpeg|mkv|rm|rmvb|mov|wmv|asf|ts|flv|".indexOf(`|${ext}|`) >= 0) {
     return file_video(path);
   }
 
+
   if ("|mp3|flac|wav|ogg|m4a|".indexOf(`|${ext}|`) >= 0) {
     return file_audio(path);
   }
+
 
   if ("|bmp|jpg|jpeg|png|gif|".indexOf(`|${ext}|`) >= 0) {
     return file_image(path);
   }
 
+
   if ('pdf' === ext) return file_pdf(path);
 }
+
 
 // Document display |html|php|css|go|java|js|json|txt|sh|md|
 function file_code(path) {
@@ -724,6 +782,7 @@ function file_code(path) {
 	`;
   $('#content').html(content);
 
+
   $.get(path, function (data) {
     $('#editor').html($('<div/>').text(data).html());
     var code_type = "Text";
@@ -734,6 +793,7 @@ function file_code(path) {
     editor.setTheme("ace/theme/ambiance");
     editor.setFontSize(18);
     editor.session.setMode("ace/mode/" + code_type);
+
 
     //Autocompletion
     editor.setOptions({
@@ -754,6 +814,37 @@ function copyToClipboard(str) {
 // Document display video |mp4|webm|avi|
 function file_video(path) {
  const url = window.location.origin + path;
+  let player_items = [
+    {
+      text: 'MXPlayer(Free)',
+      href: `intent:${url}#Intent;package=com.mxtech.videoplayer.ad;S.title=${path};end`,
+    },
+    {
+      text: 'MXPlayer(Pro)',
+      href: `intent:${url}#Intent;package=com.mxtech.videoplayer.pro;S.title=${path};end`,
+    },
+    {
+      text: 'nPlayer',
+      href: `nplayer-${url}`,
+    },
+    {
+      text: 'VLC',
+      href: `vlc://${url}`,
+    },
+    {
+      text: 'PotPlayer',
+      href: `potplayer://${url}`
+    }
+  ]
+    .map(it => `<li class="mdui-menu-item"><a href="${it.href}" class="mdui-ripple">${it.text}</a></li>`)
+    .join('');
+  player_items += `<li class="mdui-divider"></li>
+                   <li class="mdui-menu-item"><a id="copy-link" class="mdui-ripple">Copy Link</a></li>`;
+  const playBtn = `
+      
+      <ul class="mdui-menu" id="player-items">${player_items}</ul>`;
+
+
   const content = `
   
 <div class="mdui-container-fluid">
@@ -763,6 +854,14 @@ function file_video(path) {
 	</video>
 	<br>${playBtn}
 	<!-- Fixed label -->
+	<div class="mdui-textfield">
+	  <label class="mdui-textfield-label">Download Link</label>
+	  <input class="mdui-textfield-input" type="text" value="${url}"/>
+	</div>
+	<div class="mdui-textfield">
+	  <label class="mdui-textfield-label">HTML Refrence Adress</label>
+	  <textarea class="mdui-textfield-input"><video><source src="${url}" type="video/mp4"></video></textarea>
+	</div>
 </div>
 <a href="${url}" class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme-accent"><i class="mdui-icon material-icons">file_download</i></a>
 	`;
@@ -772,6 +871,7 @@ function file_video(path) {
     mdui.snackbar('Copied To Clipboard!');
   });
 }
+
 
 // File display Audio |mp3|flac|m4a|wav|ogg|
 function file_audio(path) {
@@ -798,6 +898,7 @@ function file_audio(path) {
   $('#content').html(content);
 }
 
+
 // Document display pdf  pdf
 function file_pdf(path) {
   const url = window.location.origin + path;
@@ -809,6 +910,7 @@ function file_pdf(path) {
 	`;
   $('#content').removeClass('mdui-container').addClass('mdui-container-fluid').css({padding: 0}).html(content);
 }
+
 
 // picture display
 function file_image(path) {
@@ -896,6 +998,8 @@ function file_image(path) {
 }
 
 
+
+
 //Time conversion
 function utc2beijing(utc_datetime) {
   // Convert to normal time format year-month-day hour: minute: second
@@ -905,13 +1009,16 @@ function utc2beijing(utc_datetime) {
   var hour_minute_second = utc_datetime.substr(T_pos + 1, Z_pos - T_pos - 1);
   var new_datetime = year_month_day + " " + hour_minute_second; // 2017-03-31 08:02:06
 
+
   // Processing becomes timestamp
   timestamp = new Date(Date.parse(new_datetime));
   timestamp = timestamp.getTime();
   timestamp = timestamp / 1000;
 
+
   // 8 hours more, Beijing time is eight more time zones than UTC time
   var unixtimestamp = timestamp + 8 * 60 * 60;
+
 
   // Timestamp to time
   var unixtimestamp = new Date(unixtimestamp * 1000);
@@ -926,6 +1033,7 @@ function utc2beijing(utc_datetime) {
     + minute.substring(minute.length - 2, minute.length) + ":"
     + second.substring(second.length - 2, second.length);
 }
+
 
 // bytes Adaptive conversion to KB, MB, GB
 function formatFileSize(bytes) {
@@ -945,12 +1053,15 @@ function formatFileSize(bytes) {
   return bytes;
 }
 
+
 String.prototype.trim = function (char) {
   if (char) {
     return this.replace(new RegExp('^\\' + char + '+|\\' + char + '+$', 'g'), '');
   }
   return this.replace(/^\s+|\s+$/g, '');
 };
+
+
 
 
 // README.md HEAD.md stand by
@@ -966,11 +1077,14 @@ function markdown(el, data) {
   }
 }
 
+
 // Listen for fallback events
 window.onpopstate = function () {
   var path = window.location.pathname;
   render(path);
 }
+
+
 
 
 $(function () {
@@ -988,6 +1102,7 @@ $(function () {
       render(url);
       return false;
   });*/
+
 
   render(path);
 });
